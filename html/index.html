@@ -29,13 +29,13 @@
       google.charts.load('current', {'packages':['corechart']});
             
        
-      function getChartData(selected_application, selectionPeriod) {		   
+      function getChartData(selectedApplication, selectionPeriod) {		   
     	   
     	//ajax call for getting data from Database by DBconnection.php
     	var jsonData = $.ajax({
         url: "/DBConnectionProject/src/DBConnection.php",
         type:"POST",
-        data: {id:selected_application, range:selectionPeriod},
+        data: {id:selectedApplication, range:selectionPeriod},
         dataType: "json",
         async: false
         }).responseText;
@@ -82,15 +82,15 @@
         ]);
         
         //callback to function - render charts
-        drawchart(data, selected_application,selectionPeriod);
+        drawchart(data, selectedApplication,selectionPeriod);
         
       }
 
       // function that draws the pie chart and barchart
-      function drawchart(data, selected_application,selectionPeriod){
+      function drawchart(data, selectedApplication,selectionPeriod){
     	  
     	// Set pie chart options
-          var pie_options = {'title': selected_application+ ' - Automation Status',
+          var pie_options = {'title': selectedApplication+ ' - Automation Status',
                          'width':600,
                          'height':400,
                          };
@@ -101,7 +101,7 @@
           pie_chart.draw(data, pie_options);
           
        // Set pie chart options
-          var barchart_options = { 'title':selected_application+ ' - Automation Status',
+          var barchart_options = { 'title':selectedApplication+ ' - Automation Status',
           		width:600,
                   height:400,
                   legend: 'none'};      
@@ -183,8 +183,8 @@
 	 
   	//Re-load the charts when user changes the input
 	 function run(){
-		var selected_application = document.getElementById("app").value;
-       	google.charts.setOnLoadCallback(getChartData(selected_application,getRadioSelection()));
+		var selectedApplication = document.getElementById("app").value;
+       	google.charts.setOnLoadCallback(getChartData(selectedApplication,getRadioSelection()));
 	 }
 	 
 	 //Load the charts on default page load
