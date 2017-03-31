@@ -1,0 +1,206 @@
+<html>
+  <head>
+  
+ 	<style>
+		H2 {
+		color: orange;
+		font-family: verdana;
+		text-align: center;
+		}
+		
+		select, label,input, p{
+		color: black;
+		font-family: verdana;
+		text-align: center;			
+		}
+		
+		#selectFormatting {
+  			display: inline-block;
+		}
+	</style>
+	
+	
+    <!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script type="text/javascript">
+
+      // Load the Visualization API and the corechart package.
+      google.charts.load('current', {'packages':['corechart']});
+            
+       
+      function getChartData(selected_application, selectionPeriod) {		   
+    	   
+    	//ajax call for getting data from Database by DBconnection.php
+    	var jsonData = $.ajax({
+        url: "/DBConnectionProject/src/DBConnection.php",
+        type:"POST",
+        data: {id:selected_application, range:selectionPeriod},
+        dataType: "json",
+        async: false
+        }).responseText;
+    	   
+    	   
+    	 var data = JSON.parse(jsonData);
+    	 	 
+    	 var failLabel = "Failed"; var passLabel = "Passed";
+    	 var blockLabel = "Blocked"; var naLabel =  "Not Applicable";
+    	 var failValue = passValue = blockValue = naValue = 0;
+    	 
+    	 
+    	 for(var i=0; i<data.length; i++){
+    		 
+    		 switch(data[i]['ExecutionStatus']){
+    		 
+    		 case 'Failed'			:	failValue = data[i]['Count'];
+    			 						console.log("inside case - "+failLabel+" : " + data[i]['Count']);
+    									break;
+    									
+    		 case 'Passed'			:	passValue = data[i]['Count'];
+										console.log("inside case - "+passLabel+" : " + data[i]['Count']);
+										break;
+										
+    		 case 'Blocked'			:	blockValue = data[i]['Count'];
+										console.log("inside case - "+blockLabel+" : " + data[i]['Count']);
+										break;
+										
+    		 case 'Not Applicable'	:	naValue = data[i]['Count'];
+										console.log("inside case - "+naLabel+" : " + data[i]['Count']);
+										break;
+    		 
+    		 }
+    	 }
+    	  
+
+        // Create the data table for both the charts.
+        var data = google.visualization.arrayToDataTable([
+            ['Execution Status', 'Number of Test Case', { role: 'style' }, { role: 'annotation' }],
+            [naLabel,			parseInt(naValue), 		'color: blue',		parseInt(naValue)	],
+            [failLabel, 		parseInt(failValue), 	'color: red',		parseInt(failValue)	],
+            [blockLabel, 		parseInt(blockValue), 	'color:orange', 	parseInt(blockValue)],
+            [passLabel, 		parseInt(passValue), 	'color: green',		parseInt(passValue) ]
+        ]);
+        
+        //callback to function - render charts
+        drawchart(data, selected_application,selectionPeriod);
+        
+      }
+
+      // function that draws the pie chart and barchart
+      function drawchart(data, selected_application,selectionPeriod){
+    	  
+    	// Set pie chart options
+          var pie_options = {'title': selected_application+ ' - Automation Status',
+                         'width':600,
+                         'height':400,
+                         };
+          
+          // Instantiate and draw PIE chart and event listener
+          var pie_chart = new google.visualization.PieChart(document.getElementById('piechart_div'));
+          google.visualization.events.addListener(pie_chart, 'select', pie_selectHandler);
+          pie_chart.draw(data, pie_options);
+          
+       // Set pie chart options
+          var barchart_options = { 'title':selected_application+ ' - Automation Status',
+          		width:600,
+                  height:400,
+                  legend: 'none'};      
+
+          // Instantiate and draw Bar chart and event listener
+          var bar_chart = new google.visualization.BarChart(document.getElementById('barchart_div'));
+          google.visualization.events.addListener(bar_chart, 'select', bar_selectHandler);
+          bar_chart.draw(data, barchart_options);
+          
+   		
+          //Event Listner for PIE Chart
+          function pie_selectHandler() {
+        	  performAction(pie_chart.getSelection()[0]);
+          }
+          
+          //Event Listner for Bar Chart
+          function bar_selectHandler() {
+        	  performAction(bar_chart.getSelection()[0]);
+            }
+        
+        
+        // performing the click operation on chart legends        
+        function performAction(selectedItem){
+        	
+        	var testCaseListPageURL = "/DBConnectionProject/html/tc_list.html?";
+        	
+        	if (selectedItem) {
+                var selectedValue = data.getValue(selectedItem.row, 0);
+                window.open(testCaseListPageURL+"app="+selected_application
+                		+"&status="+selectedValue+"&range="+selectionPeriod);
+              }
+        	
+        }
+     }
+      
+    </script>
+    
+    
+  </head>
+
+  <body onload= "defaultRun()">
+    <!--Div that will hold the pie chart-->
+ 
+ 	<div id="heading">
+    	<img style="float:left" src="/logo.jpg" alt="Continuum Logo"><br>
+    	<H2>Engineering QA Automation Status</H2> <br>
+    </div>
+    
+    
+    <div id="selectFormatting">
+    	<label>Please select the Application Name from the dropdown: </label>
+    	<select id='app' onchange="run()">
+    		<option value="All">All</option>
+	  		<option value="NOC">NOC</option>
+	  		<option value="Agent">Agent</option>	 
+		</select>
+		
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		
+		<label>Select Duration: </label>
+		<input type="radio" id="radio" name="dateRange" value="7" onclick="run()" checked> Last 7 Days
+  		<input type="radio" id="radio" name="dateRange" value="15" onclick="run()"> Last 15 Days
+  		<input type="radio" id="radio" name="dateRange" value="30" onclick="run()">Last 30 Days
+		
+    </div>
+ 	    
+    <table>
+      <tr>
+        <td><div id="piechart_div" style="border: 1px solid #ccc"></div></td>
+        <td><div id="barchart_div" style="border: 1px solid #ccc"></div></td>
+      </tr>
+    </table>
+    
+    <div id="legends">
+    <p> Click on Graph legends for more details !!</p>
+    </div>
+    
+  <script type="text/javascript">	
+	 
+  	//Re-load the charts when user changes the input
+	 function run(){
+		var selected_application = document.getElementById("app").value;
+       	google.charts.setOnLoadCallback(getChartData(selected_application,getRadioSelection()));
+	 }
+	 
+	 //Load the charts on default page load
+	 function defaultRun(){
+		google.charts.setOnLoadCallback(getChartData("All",getRadioSelection()));
+	 }
+	 
+	 //getting Date Range - Radio Button Selection Value
+	 function getRadioSelection(radio){
+		 var radio = document.getElementsByName('dateRange');
+		 for(var i = 0; i < radio.length; i++){
+			    if(radio[i].checked)
+			    	return radio[i].value;
+		}
+	 }
+		 
+	</script>
+  </body>
+</html>
