@@ -78,7 +78,7 @@
             ['Execution Status', 'Number of Test Case', { role: 'style' }, { role: 'annotation' }],
             [naLabel,			parseInt(naValue), 		'color: blue',		parseInt(naValue)	],
             [failLabel, 		parseInt(failValue), 	'color: red',		parseInt(failValue)	],
-            [blockLabel, 		parseInt(blockValue), 	'color:orange', 	parseInt(blockValue)],
+            [blockLabel, 		parseInt(blockValue), 	'color: orange', 	parseInt(blockValue)],
             [passLabel, 		parseInt(passValue), 	'color: green',		parseInt(passValue) ]
         ]);
         
@@ -131,7 +131,7 @@
         	
         	if (selectedItem) {
                 var selectedValue = data.getValue(selectedItem.row, 0);
-                window.open(testCaseListPageURL+"app="+selected_application
+                window.open(testCaseListPageURL+"app="+selectedApplication
                 		+"&status="+selectedValue+"&range="+selectionPeriod);
               }
         	
@@ -162,8 +162,17 @@
 		
 		&nbsp;&nbsp;&nbsp;&nbsp;
 		
-		<label>Select Duration: </label>
-		<input type="radio" id="radio" name="dateRange" value="7" onclick="run()" checked> Last 7 Days
+		<label>Select Duration: </label>		
+		<select id='range' onchange="change()">
+    		<option value="1">Today</option>
+	  		<option value="2">Yesterday</option>
+	  		<option value="3">T-3 Days</option>
+	  		<option value="4">T-4 Days</option>
+	  		<option value="5">T-5 Days</option>
+	  		<option value="6">T-6 Days</option> 
+		</select>
+		&nbsp;&nbsp;<label>OR</label>&nbsp;
+		<input type="radio" id="radio" name="dateRange" value="7" onclick="run()"> Last 7 Days
   		<input type="radio" id="radio" name="dateRange" value="15" onclick="run()"> Last 15 Days
   		<input type="radio" id="radio" name="dateRange" value="30" onclick="run()">Last 30 Days
 		
@@ -185,21 +194,39 @@
   	//Re-load the charts when user changes the input
 	 function run(){
 		var selectedApplication = document.getElementById("app").value;
-       	google.charts.setOnLoadCallback(getChartData(selectedApplication,getRadioSelection()));
+       	google.charts.setOnLoadCallback(getChartData(selectedApplication,getSelection()));
 	 }
 	 
 	 //Load the charts on default page load
 	 function defaultRun(){
-		google.charts.setOnLoadCallback(getChartData("All",getRadioSelection()));
+		google.charts.setOnLoadCallback(getChartData("All",getSelection()));
 	 }
 	 
-	 //getting Date Range - Radio Button Selection Value
-	 function getRadioSelection(radio){
+	 //uncheck the radio button and call run() method to get the selected range
+	 function change(){
 		 var radio = document.getElementsByName('dateRange');
 		 for(var i = 0; i < radio.length; i++){
 			    if(radio[i].checked)
-			    	return radio[i].value;
-		}
+			    	radio[i].checked = false;
+		 }
+		 run();
+	 }
+	 
+	 //getting Date Range - Radio Button Selection Value
+	 function getSelection(){
+		 var radio = document.getElementsByName('dateRange');
+		 var selectedRange = "";
+		 for(var i = 0; i < radio.length; i++){
+			    if(radio[i].checked)
+			    	selectedRange = radio[i].value;
+		 }
+		 if(selectedRange==""){
+			 selectedRange = document.getElementById("range").value;
+			 }
+			    console.log("getting range ::" + selectedRange);
+			    
+			    return selectedRange;
+		
 	 }
 		 
 	</script>
