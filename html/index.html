@@ -8,7 +8,7 @@
 		text-align: center;
 		}
 		
-		select, label,input, p{
+		select, label,input,p{
 		color: black;
 		font-family: verdana;
 		text-align: center;			
@@ -28,7 +28,8 @@
       // Load the Visualization API and the corechart package.
       google.charts.load('current', {'packages':['corechart']});
             
-       
+      
+      //Load the chart data from DB by calling DBConnection.php
       function getChartData(selectedApplication, selectionPeriod) {		   
     	   
     	//ajax call for getting data from Database by DBconnection.php
