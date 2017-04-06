@@ -115,31 +115,31 @@
      	        var tr = tbl.insertRow();
      	        	
 	     	    var td = tr.insertCell();
-		        td.appendChild(document.createTextNode(data[i]['ApplicationName']));
+		        td.appendChild(document.createTextNode(data[i]['prod_name']));
 		        td.style.border = '1px solid black';
 		        
 		        var td = tr.insertCell();
- 	            td.appendChild(document.createTextNode(data[i]['TestSuiteID']));
+ 	            td.appendChild(document.createTextNode(data[i]['testsuite_id']));
  	            td.style.border = '1px solid black';
  	            
  	           	var td = tr.insertCell();
-	            td.appendChild(document.createTextNode(data[i]['TestCaseID']));
+	            td.appendChild(document.createTextNode(data[i]['testcase_id']));
 	            td.style.border = '1px solid black';
 	            
 	            var td = tr.insertCell();
- 	            td.appendChild(document.createTextNode(data[i]['TestCaseName']));
+ 	            td.appendChild(document.createTextNode(data[i]['TestCase_Name']));
  	            td.style.border = '1px solid black';
  	            
  	           	var td = tr.insertCell();
-	            td.appendChild(document.createTextNode(data[i]['ExecutionDate']));
+	            td.appendChild(document.createTextNode(data[i]['execution_date']));
 	            td.style.border = '1px solid black';
 	            
 	            var td = tr.insertCell();
- 	            td.appendChild(document.createTextNode(data[i]['ExecutionTime']));
+ 	            td.appendChild(document.createTextNode(data[i]['timeexecution']));
  	            td.style.border = '1px solid black';
  	            
  	           	var td = tr.insertCell();
-	            td.appendChild(document.createTextNode(parseDescrition(data[i]['ExecutionDescription'])));
+	            td.appendChild(document.createTextNode(parseDescrition(data[i]['description'])));
 	            td.style.border = '1px solid black';
 		        
     	

@@ -24,13 +24,12 @@ if ($conn->connect_error) {
 $appSelected= $_POST["id"];
 $range = $_POST["range"];
 
-
 //the SQL query to be executed
 if($appSelected == "All")
-$query = "select ExecutionStatus, count(*) as count from execution_status where DATE(ExecutionDate) > (NOW() - INTERVAL '$range' DAY) GROUP BY ExecutionStatus";
+$query = "select testcase_status, count(*) as count from execution_status where DATE(execution_date) > (NOW() - INTERVAL '$range' DAY) GROUP BY testcase_status";
 else 
-$query = "select ExecutionStatus, count(*) as count from execution_status where ApplicationName='$appSelected' and DATE(ExecutionDate) > (NOW() - INTERVAL '$range' DAY)
-																																			GROUP BY ExecutionStatus;";
+$query = "select testcase_status, count(*) as count from execution_status where prod_name='$appSelected' and DATE(execution_date) > (NOW() - INTERVAL '$range' DAY)
+																																			GROUP BY testcase_status;";
 //storing the result of the executed query
 $result = $conn->query($query);
 //initialize the array to store the processed data
@@ -41,7 +40,7 @@ if ($result->num_rows > 0) {
 	while($row = $result->fetch_assoc()) {
 		$jsonArrayItem = array();
 		
-		$jsonArrayItem['ExecutionStatus'] = $row['ExecutionStatus'];
+		$jsonArrayItem['testcase_status'] = $row['testcase_status'];
 		$jsonArrayItem['Count'] = $row['count'];
 		
 		//append the above created object into the main array.

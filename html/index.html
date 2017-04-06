@@ -44,20 +44,20 @@
     	   
     	 var data = JSON.parse(jsonData);
     	 	 
-    	 var failLabel = "Failed"; var passLabel = "Passed";
+    	 var failLabel = "Fail"; var passLabel = "Pass";
     	 var blockLabel = "Blocked"; var naLabel =  "Not Applicable";
     	 var failValue = passValue = blockValue = naValue = 0;
     	 
     	 
     	 for(var i=0; i<data.length; i++){
     		 
-    		 switch(data[i]['ExecutionStatus']){
+    		 switch(data[i]['testcase_status']){
     		 
-    		 case 'Failed'			:	failValue = data[i]['Count'];
+    		 case 'Fail'			:	failValue = data[i]['Count'];
     			 						console.log("inside case - "+failLabel+" : " + data[i]['Count']);
     									break;
     									
-    		 case 'Passed'			:	passValue = data[i]['Count'];
+    		 case 'Pass'			:	passValue = data[i]['Count'];
 										console.log("inside case - "+passLabel+" : " + data[i]['Count']);
 										break;
 										
@@ -86,12 +86,22 @@
         drawchart(data, selectedApplication,selectionPeriod);
         
       }
-
+		
       // function that draws the pie chart and barchart
       function drawchart(data, selectedApplication,selectionPeriod){
     	  
+    	  var statusDate = selectionPeriod;
+    	  
+    	  switch(statusDate){
+    	  
+    	  case "1" : statusDate= "for Today"; break;
+    	  case "2" : statusDate= "Since Yesterday"; break;
+    	  default : statusDate= "for Last "+statusDate+" Days"; break;
+    	  
+    	  }
+    	  
     	// Set pie chart options
-          var pie_options = {'title': selectedApplication+ ' - Automation Status',
+          var pie_options = {'title': selectedApplication+ ' - Automation Status ' + statusDate,
                          'width':600,
                          'height':400,
                          };
@@ -102,7 +112,7 @@
           pie_chart.draw(data, pie_options);
           
        // Set pie chart options
-          var barchart_options = { 'title':selectedApplication+ ' - Automation Status',
+          var barchart_options = { 'title':selectedApplication+ ' - Automation Status ' +  statusDate,
           		width:600,
                   height:400,
                   legend: 'none'};      
@@ -156,14 +166,27 @@
     	<label>Please select the Application Name from the dropdown: </label>
     	<select id='app' onchange="run()">
     		<option value="All">All</option>
-	  		<option value="NOC">NOC</option>
-	  		<option value="Agent">Agent</option>	 
+	  		<option value="Product-HelpDesk">Product-HelpDesk</option>
+			<option value="Product-ITS">Product-ITS</option>
+			<option value="ProductAccounts">ProductAccounts</option>
+			<option value="ProductAgent">ProductAgent</option>
+			<option value="ProductC247">ProductC247</option>
+			<option value="ProductIHD">ProductIHD</option>
+			<option value="ProductITS">ProductITS</option>
+			<option value="ProductNOC">ProductNOC</option>
+			<option value="ProductOSSSystemNOC">ProductOSSSystemNOC</option>
+			<option value="ProductPatching">ProductPatching</option>
+			<option value="ProductPSA">ProductPSA</option>
+			<option value="ProductReporting">ProductReporting</option>
+			<option value="ProductScripts">ProductScripts</option>
+			<option value="SBM">SBM</option> 
 		</select>
 		
 		&nbsp;&nbsp;&nbsp;&nbsp;
 		
 		<label>Select Duration: </label>		
-		<select id='range' onchange="change()">
+		<select id='dropdown_range' onchange="change()">
+			<option value="1">Select</option>
     		<option value="1">Today</option>
 	  		<option value="2">Yesterday</option>
 	  		<option value="3">T-3 Days</option>
@@ -172,9 +195,9 @@
 	  		<option value="6">T-6 Days</option> 
 		</select>
 		&nbsp;&nbsp;<label>OR</label>&nbsp;
-		<input type="radio" id="radio" name="dateRange" value="7" onclick="run()"> Last 7 Days
-  		<input type="radio" id="radio" name="dateRange" value="15" onclick="run()"> Last 15 Days
-  		<input type="radio" id="radio" name="dateRange" value="30" onclick="run()">Last 30 Days
+		<input type="radio" id="radio" name="radio_dateRange" value="7" onclick="run()"> Last 7 Days
+  		<input type="radio" id="radio" name="radio_dateRange" value="15" onclick="run()"> Last 15 Days
+  		<input type="radio" id="radio" name="radio_dateRange" value="30" onclick="run()">Last 30 Days
 		
     </div>
  	    
@@ -204,7 +227,7 @@
 	 
 	 //uncheck the radio button and call run() method to get the selected range
 	 function change(){
-		 var radio = document.getElementsByName('dateRange');
+		 var radio = document.getElementsByName('radio_dateRange');
 		 for(var i = 0; i < radio.length; i++){
 			    if(radio[i].checked)
 			    	radio[i].checked = false;
@@ -214,19 +237,20 @@
 	 
 	 //getting Date Range - Radio Button Selection Value
 	 function getSelection(){
-		 var radio = document.getElementsByName('dateRange');
+		 var radio = document.getElementsByName('radio_dateRange');
 		 var selectedRange = "";
 		 for(var i = 0; i < radio.length; i++){
-			    if(radio[i].checked)
+			    if(radio[i].checked){
 			    	selectedRange = radio[i].value;
+			    	document.getElementById("dropdown_range").selectedIndex=0;
+			    }
 		 }
-		 if(selectedRange==""){
-			 selectedRange = document.getElementById("range").value;
-			 }
-			    console.log("getting range ::" + selectedRange);
-			    
-			    return selectedRange;
-		
+		 
+		 if(selectedRange=="")
+			 selectedRange = document.getElementById("dropdown_range").value;
+		 
+		 console.log("getting range ::" + selectedRange);
+		 return selectedRange;		
 	 }
 		 
 	</script>

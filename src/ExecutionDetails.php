@@ -29,10 +29,10 @@ $range= $_POST["range"];
 
 //the SQL query to be executed
 if($applicationName == "All"){
-	$query = "select * from execution_status where ExecutionStatus='$Status' and DATE(ExecutionDate) > (NOW() - INTERVAL '$range' DAY);";
+	$query = "select * from execution_status where testcase_status='$Status' and DATE(execution_date) > (NOW() - INTERVAL '$range' DAY);";
 }else{
-	$query = "select * from execution_status where ExecutionStatus='$Status' and ApplicationName='$applicationName'
-															and DATE(ExecutionDate) > (NOW() - INTERVAL '$range' DAY);";
+	$query = "select * from execution_status where testcase_status='$Status' and prod_name='$applicationName'
+															and DATE(execution_date) > (NOW() - INTERVAL '$range' DAY);";
 }
 //storing the result of the executed query
 $result = $conn->query($query);
@@ -45,13 +45,13 @@ if ($result->num_rows > 0) {
 	while($row = $result->fetch_assoc()) {
 		$jsonArrayItem = array();
 		
-		$jsonArrayItem['ApplicationName'] = $row['ApplicationName'];
-		$jsonArrayItem['TestSuiteID'] = $row['TestSuiteID'];
-		$jsonArrayItem['TestCaseID'] = $row['TestCaseID'];
-		$jsonArrayItem['TestCaseName'] = $row['TestCaseName'];		
-		$jsonArrayItem['ExecutionDate'] = $row['ExecutionDate'];
-		$jsonArrayItem['ExecutionTime'] = $row['ExecutionTime'];
-		$jsonArrayItem['ExecutionDescription'] = $row['ExecutionDescription'];
+		$jsonArrayItem['prod_name'] = $row['prod_name'];
+		$jsonArrayItem['testsuite_id'] = $row['testsuite_id'];
+		$jsonArrayItem['testcase_id'] = $row['testcase_id'];
+		$jsonArrayItem['TestCase_Name'] = $row['TestCase_Name'];		
+		$jsonArrayItem['execution_date'] = $row['execution_date'];
+		$jsonArrayItem['timeexecution'] = $row['timeexecution'];
+		$jsonArrayItem['description'] = $row['description'];
 		
 		//append the above created object into the main array.
 		array_push($jsonArray, $jsonArrayItem);
