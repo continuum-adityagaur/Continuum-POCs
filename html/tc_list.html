@@ -17,8 +17,17 @@
 		text-align: center;			
 		}
 		
+		#main{
+		color: black;
+		font-family: verdana;		
+		}
+		
 		#selectFormatting {
   			display: inline-block;
+		}
+		
+		#note{
+			color: red;
 		}
 		
 
@@ -49,20 +58,16 @@
     	  var data = JSON.parse(jsonData);
     	  
     	 	 
-    	 	 $("#main").html('');
+    	 	// $("#main").html('');
       		var body = document.body;
       		
       		var div = document.createElement('div');
       		div.id='main';
       		
       		var para = document.createElement("P");         // Create a <p> element
-      		var t1 = document.createTextNode("Please find below the list of "); 
-      		var	t2 = document.createTextNode(testCaseStatus);
-      		var t3 = document.createTextNode(" test cases for ");
-      		var t4 = document.createTextNode(applicationName);   
-      				
-      		para.appendChild(t1);para.appendChild(t2);para.appendChild(t3);para.appendChild(t4);
-      		
+      		var t1 = document.createTextNode("Please find below the list of " +testCaseStatus
+      											+" test cases for "+ applicationName+ " applications"); 
+      		para.appendChild(t1);
       		div.appendChild(para);
       		
       	    tbl  = document.createElement('table');
@@ -168,6 +173,5 @@
     <img style="float:left" src="/logo.jpg" alt="Continuum Logo"><br>
     <H2>Engineering QA Automation Status</H2> <br>
     </div>
-	  
 	</body>
 	</html>

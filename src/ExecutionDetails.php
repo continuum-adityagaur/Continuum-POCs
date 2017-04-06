@@ -29,10 +29,10 @@ $range= $_POST["range"];
 
 //the SQL query to be executed
 if($applicationName == "All"){
-	$query = "select * from execution_status where testcase_status='$Status' and DATE(execution_date) > (NOW() - INTERVAL '$range' DAY);";
+	$query = "select * from execution_status where testcase_status='$Status' and DATE(execution_date) > (NOW() - INTERVAL '$range' DAY) LIMIT 25;";
 }else{
 	$query = "select * from execution_status where testcase_status='$Status' and prod_name='$applicationName'
-															and DATE(execution_date) > (NOW() - INTERVAL '$range' DAY);";
+															and DATE(execution_date) > (NOW() - INTERVAL '$range' DAY) LIMIT 25;";
 }
 //storing the result of the executed query
 $result = $conn->query($query);
