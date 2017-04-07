@@ -37,7 +37,9 @@
 	  <script type="text/javascript">
             
        
-      function drawTable() {
+      function draw(offset) {
+    	  
+    	  console.log("Offset "+offset);
     	  
     	  //getting GET params from the URL
     	  let params = (new URL(location)).searchParams;
@@ -50,12 +52,13 @@
     	  var jsonData = $.ajax({
     		  url: "/DBConnectionProject/src/ExecutionDetails.php",
     		  type:"POST",
-    		  data: {status:testCaseStatus, application:applicationName, range:range },
+    		  data: {status:testCaseStatus, application:applicationName, range:range, offset:offset},
     		  dataType: "json",
     		  async: false
     		  }).responseText;
     	  
     	  var data = JSON.parse(jsonData);
+    	  
     	  
     	 	 
     	 	// $("#main").html('');
@@ -64,102 +67,161 @@
       		var div = document.createElement('div');
       		div.id='main';
       		
-      		var para = document.createElement("P");         // Create a <p> element
-      		var t1 = document.createTextNode("Please find below the list of " +testCaseStatus
-      											+" test cases for "+ applicationName+ " applications"); 
-      		para.appendChild(t1);
-      		div.appendChild(para);
+      		if(offset==0){
+	      		var para = document.createElement("P");         // Create a <p> element
+	      		var t1 = document.createTextNode("Please find below the list of " +testCaseStatus
+	      											+" test cases for "+ applicationName+ " applications"); 
+	      		para.appendChild(t1);
+	      		div.appendChild(para);
+	      		}
+	      		
+	      		if(data.length>=10){
+		      		var button = document.createElement('button');
+		      		buttonStyle(button);
+		      		button.style.width='100%';
+		      		button.style.border= 'none';
+		      		var button_text	=	document.createTextNode('Displaying records '+offset+' to '+ (offset+10));
+		      		button.appendChild(button_text);
+		      		div.appendChild(button);
+		      		
+		      		var button1 = document.createElement('button');
+		      		button1.id='btn';
+		      		buttonStyle(button1);
+		      		button1.style.float = 'right';
+		      		button1.style.backgroundColor = '#4CAF50';
+		      		button1.style.cursor='pointer';
+		      		var button_text1	=	document.createTextNode('Click here for more records!');
+		      		button1.appendChild(button_text1);
+		      		
+		      		var new_offset= offset+10;
+		      		button1.onclick = function() {draw(new_offset)};
+		      		
+		      		drawTable(data, div);
+		      		div.appendChild(button1)
+		          	body.appendChild(div);
+      		}else{
+    	  
+      			var button = document.createElement('button');
+	      		buttonStyle(button);
+	      		button.style.width='100%';
+	      		button.style.border= 'none';
+	    		var label_text	=	document.createTextNode('Displaying records '+offset+' to '+ (offset+data.length));
+	    		button.appendChild(label_text);
+	    		div.appendChild(button);
+	    		
+	    		drawTable(data, div);
+	          	body.appendChild(div);
+    	  
+      			}
       		
-      	    tbl  = document.createElement('table');
-      	    
-      	    tbl.style.width  = 'auto';
-      	    tbl.style.border = '2px solid black';
-      	  	tbl.style.fontFamily ='calibri';
-      	    
-      	  	var header = tbl.createTHead();
-      	  	var tr = header.insertRow(0);
-   	   		tr.style.backgroundColor = '#42f4e2';
-   	   		   	   	 	
-   	   		
-   	   		var td = tr.insertCell();
-      		td.appendChild(document.createTextNode('Application'));
-      		td.style.border = '1px solid black';
-   	    
-   	    	td = tr.insertCell();
-          	td.appendChild(document.createTextNode('Test Suite ID'));
-          	td.style.width="auto";
-          	td.style.border = '1px solid black';
-          	
-           var td = tr.insertCell();
-           td.appendChild(document.createTextNode('Test Case ID'));
-           td.style.border = '1px solid black';
-           
-           var td = tr.insertCell();
-           td.appendChild(document.createTextNode('Test Case Name'));
-           td.style.width="auto";
-           td.style.border = '1px solid black';
-           
-           var td= tr.insertCell();
-           td.appendChild(document.createTextNode('Execution Date'));
-           td.style.border = '1px solid black';
-           
-           var td = tr.insertCell();
-           td.appendChild(document.createTextNode('Execution Time'));
-           td.style.border = '1px solid black';
-           
-           
-           var td = tr.insertCell();
-           td.appendChild(document.createTextNode('Execution Description'));
-           td.style.border = '1px solid black';
-           td.style.height="auto";
-           td.style.width="auto";
-   		   
-      	    
-    	for (var i=0; i< data.length; i++){
-    		    	     	    
-     	        var tr = tbl.insertRow();
-     	        	
-	     	    var td = tr.insertCell();
-		        td.appendChild(document.createTextNode(data[i]['prod_name']));
-		        td.style.border = '1px solid black';
-		        
-		        var td = tr.insertCell();
- 	            td.appendChild(document.createTextNode(data[i]['testsuite_id']));
- 	            td.style.border = '1px solid black';
- 	            
- 	           	var td = tr.insertCell();
-	            td.appendChild(document.createTextNode(data[i]['testcase_id']));
-	            td.style.border = '1px solid black';
-	            
-	            var td = tr.insertCell();
- 	            td.appendChild(document.createTextNode(data[i]['TestCase_Name']));
- 	            td.style.border = '1px solid black';
- 	            
- 	           	var td = tr.insertCell();
-	            td.appendChild(document.createTextNode(data[i]['execution_date']));
-	            td.style.border = '1px solid black';
-	            
-	            var td = tr.insertCell();
- 	            td.appendChild(document.createTextNode(data[i]['timeexecution']));
- 	            td.style.border = '1px solid black';
- 	            
- 	           	var td = tr.insertCell();
-	            td.appendChild(document.createTextNode(parseDescrition(data[i]['description'])));
-	            td.style.border = '1px solid black';
-		        
-    	
-    	}
-     	
-    	div.appendChild(tbl);
-     	body.appendChild(div);
+      	
         	 
     	 
       
       }
       
+      function buttonStyle(button){
+    	  	button.style.backgroundColor = '#f44336';
+    	  	button.style.color = 'white';
+    		button.style.padding= '10px 32px';
+    		button.style.textAlign = 'center';
+    		button.style.textDecoration= 'none';
+    		button.style.display= 'inline-block';
+    		button.style.fontSize= '16px';    	  
+      }
+      
+      function drawTable(data, div){
+    	  
+    	  tbl  = document.createElement('table');
+    	  tbl.id='tbl';
+    	    
+    	    tbl.style.width  = 'auto';
+    	    tbl.style.border = '2px solid black';
+    	  	tbl.style.fontFamily ='calibri';
+    	    
+    	  	var header = tbl.createTHead();
+    	  	var tr = header.insertRow(0);
+ 	   		tr.style.backgroundColor = '#008CBA';
+ 	   		   	   	 	
+ 	   		
+ 	   		var td = tr.insertCell();
+    		td.appendChild(document.createTextNode('Application'));
+    		td.style.border = '1px solid black';
+ 	    
+ 	    	td = tr.insertCell();
+        	td.appendChild(document.createTextNode('Test Suite ID'));
+        	td.style.width="auto";
+        	td.style.border = '1px solid black';
+        	
+	         var td = tr.insertCell();
+	         td.appendChild(document.createTextNode('Test Case ID'));
+	         td.style.border = '1px solid black';
+	         
+	         var td = tr.insertCell();
+	         td.appendChild(document.createTextNode('Test Case Name'));
+	         td.style.width="auto";
+	         td.style.border = '1px solid black';
+         
+	         var td= tr.insertCell();
+	         td.appendChild(document.createTextNode('Execution Date'));
+	         td.style.border = '1px solid black';
+	         
+	         var td = tr.insertCell();
+	         td.appendChild(document.createTextNode('Execution Time'));
+	         td.style.border = '1px solid black';
+	         
+         
+	         var td = tr.insertCell();
+	         td.appendChild(document.createTextNode('Execution Description'));
+	         td.style.border = '1px solid black';
+	         td.style.height="auto";
+	         td.style.width="auto";
+	 		   
+	    	    
+	  		for (var i=0; i< data.length; i++){
+	  		    	     	    
+	   	        var tr = tbl.insertRow();
+   	        	
+	     	    var td1 = tr.insertCell();
+		        td1.appendChild(document.createTextNode(data[i]['prod_name']));
+		        td1.style.border = '1px solid black';
+		        
+		        var td = tr.insertCell();
+	            td.appendChild(document.createTextNode(data[i]['testsuite_id']));
+	            td.style.border = '1px solid black';
+	            
+	           	var td = tr.insertCell();
+	            td.appendChild(document.createTextNode(data[i]['testcase_id']));
+	            td.style.border = '1px solid black';
+	            
+	            var td = tr.insertCell();
+	            td.appendChild(document.createTextNode(data[i]['TestCase_Name']));
+	            td.style.border = '1px solid black';
+	            
+	           	var td = tr.insertCell();
+	            td.appendChild(document.createTextNode(data[i]['execution_date']));
+	            td.style.border = '1px solid black';
+	            
+	            var td = tr.insertCell();
+	            td.appendChild(document.createTextNode(data[i]['timeexecution']));
+	            td.style.border = '1px solid black';
+	            
+	           	var td = tr.insertCell();
+	            td.appendChild(document.createTextNode(parseDescrition(data[i]['description'])));
+	            td.style.border = '1px solid black';
+		        
+  	
+  			}
+	  		
+	  		div.appendChild(tbl);
+	  		
+	  		
+    	  
+      }
+      
       function parseDescrition(description){
     	  
-    	  console.log("inside function....  " +description);
+    	  //console.log("inside function....  " +description);
     	  
     	  description = description.replace(/(?:\r\n|\r|\n)/g, '');
     	  return description;
@@ -167,7 +229,7 @@
     	 
     	 </script>
 	</head>
-	<body onload="drawTable()">
+	<body onload="draw(0)">
 	
 	<div id="heading">
     <img style="float:left" src="/logo.jpg" alt="Continuum Logo"><br>

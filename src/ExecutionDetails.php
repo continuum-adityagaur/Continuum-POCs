@@ -24,15 +24,17 @@ if ($conn->connect_error) {
 
 
 $Status= $_POST["status"];
-$applicationName= $_POST["application"];
+$applicationName=$_POST["application"];
 $range= $_POST["range"];
+$offset	=intval($_POST["offset"]);
+
 
 //the SQL query to be executed
 if($applicationName == "All"){
-	$query = "select * from execution_status where testcase_status='$Status' and DATE(execution_date) > (NOW() - INTERVAL '$range' DAY) LIMIT 25;";
+	$query = "select * from execution_status where testcase_status='$Status' and DATE(execution_date) > (NOW() - INTERVAL '$range' DAY) LIMIT 10 OFFSET $offset;";
 }else{
 	$query = "select * from execution_status where testcase_status='$Status' and prod_name='$applicationName'
-															and DATE(execution_date) > (NOW() - INTERVAL '$range' DAY) LIMIT 25;";
+															and DATE(execution_date) > (NOW() - INTERVAL '$range' DAY) LIMIT 10 OFFSET $offset;";
 }
 //storing the result of the executed query
 $result = $conn->query($query);
