@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 	<html>
 	<head>
-	  <title>Continuum - QA Status - T</title>
+	  <title>Test Case List</title>
 	  
 	  
 	  <style>
@@ -82,7 +82,12 @@
 	      		}
 	      		
       		
-      		if(data.length<10){
+      		if(data.length==0){
+      			alert("no more records exists!!")      			
+      		}
+      		else if(data.length!=0 && data.length<10){
+      			
+      			console.log("Data length :: " + data.length);
           	  
       			var button = document.createElement('button');
 	      		buttonStyle(button);
