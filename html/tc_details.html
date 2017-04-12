@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 	<html>
 	<head>
-	  <title>Continuum - QA Status - T</title>
+	  <title>Continuum - QA Status</title>
 	  
 	  
 	  <style>
@@ -37,9 +37,9 @@
 	  <script type="text/javascript">
             
        
-      function draw(offset) {
+      function draw() {
     	  
-    	  console.log("Offset "+offset);
+    	  
     	  
     	  //getting GET params from the URL
     	  let params = (new URL(location)).searchParams;
@@ -47,6 +47,9 @@
     	  var testCaseStatus = params.get('status');
     	  var applicationName = params.get('app');
     	  var range = params.get('range');
+    	  var offset = params.get('offset');
+    	  
+    	  console.log("Offset "+offset);
     	  
     	  //ajax call for getting data from Database by DBconnection.php
     	  var jsonData = $.ajax({
@@ -72,61 +75,21 @@
 	      		var t1 = document.createTextNode("Please find below the list of " +testCaseStatus
 	      											+" test cases for "+ applicationName+ " applications"); 
 	      		para.appendChild(t1);
-	      		
-	      		var note = document.createElement('p');
-	      		var t2 = document.createTextNode("Click on test case ID for more details.");
-	      		note.appendChild(t2);
-	      		
 	      		div.appendChild(para);
-	      	    div.appendChild(note);
 	      		}
 	      		
-      		
-      		if(data.length<10){
-          	  
-      			var button = document.createElement('button');
-	      		buttonStyle(button);
-	      		button.style.width='100%';
-	      		button.style.border= 'none';
-	    		var label_text	=	document.createTextNode('Displaying records '+offset+' to '+ (offset+data.length));
-	    		button.appendChild(label_text);
-	    		div.appendChild(button);
-	    		
-	    		drawTable(data, div,testCaseStatus,applicationName,range, offset);
-	          	body.appendChild(div);
-    	  
-      			}else{
-		      		var button = document.createElement('button');
-		      		buttonStyle(button);
-		      		button.style.width='100%';
-		      		button.style.border= 'none';
-		      		var button_text	=	document.createTextNode('Displaying records '+offset+' to '+ (offset+10));
-		      		button.appendChild(button_text);
-		      		div.appendChild(button);
+	      	var button = document.createElement('button');
+		    buttonStyle(button);
+		    button.style.width='100%';
+		    button.style.border= 'none';
+		    var button_text	=	document.createTextNode('Displaying records '+offset+' to '+ (parseInt(offset)+data.length));
+		    button.appendChild(button_text);
+		    div.appendChild(button);
 		      		
-		      		var button1 = document.createElement('button');
-		      		button1.id='btn';
-		      		buttonStyle(button1);
-		      		button1.style.float = 'right';
-		      		button1.style.backgroundColor = '#4CAF50';
-		      		button1.style.cursor='pointer';
-		      		var button_text1	=	document.createTextNode('Click here for more records!');
-		      		button1.appendChild(button_text1);
-		      		
-		      		var new_offset= offset+10;
-		      		button1.onclick = function() {draw(new_offset)};
-		      		drawTable(data, div,testCaseStatus,applicationName,range, offset);
-		      		div.appendChild(button1)
-		          	body.appendChild(div);
-      		}
-      		
-      	
-        	 
-    	 
+		    drawTable(data, div);
+		    body.appendChild(div);
+	}
       
-      }
-      
-      //styling the header above the table
       function buttonStyle(button){
     	  	button.style.backgroundColor = '#f44336';
     	  	button.style.color = 'white';
@@ -137,15 +100,12 @@
     		button.style.fontSize= '16px';    	  
       }
       
-      //rendering the table 
-      function drawTable(data, div,testCaseStatus,applicationName,range, offset){
-    	  
-    	  console.log("Inside drawTable() ::" + testCaseStatus + range+applicationName );
+      function drawTable(data, div){
     	  
     	  tbl  = document.createElement('table');
     	  tbl.id='tbl';
     	    
-    	   	tbl.style.width  = 'auto';
+    	    tbl.style.width  = 'auto';
     	    tbl.style.border = '2px solid black';
     	  	tbl.style.fontFamily ='calibri';
     	    
@@ -159,12 +119,12 @@
     		td.style.border = '1px solid black';
  	    
  	    	td = tr.insertCell();
-        	td.appendChild(document.createTextNode('Test Case ID'));
+        	td.appendChild(document.createTextNode('Test Suite ID'));
         	td.style.width="auto";
         	td.style.border = '1px solid black';
         	
 	         var td = tr.insertCell();
-	         td.appendChild(document.createTextNode('Execution Status'));
+	         td.appendChild(document.createTextNode('Test Case ID'));
 	         td.style.border = '1px solid black';
 	         
 	         var td = tr.insertCell();
@@ -172,7 +132,21 @@
 	         td.style.width="auto";
 	         td.style.border = '1px solid black';
          
-	        
+	         var td= tr.insertCell();
+	         td.appendChild(document.createTextNode('Execution Date'));
+	         td.style.border = '1px solid black';
+	         
+	         var td = tr.insertCell();
+	         td.appendChild(document.createTextNode('Execution Time'));
+	         td.style.border = '1px solid black';
+	         
+         
+	         var td = tr.insertCell();
+	         td.appendChild(document.createTextNode('Execution Description'));
+	         td.style.border = '1px solid black';
+	         td.style.height="auto";
+	         td.style.width="auto";
+	 		   
 	    	    
 	  		for (var i=0; i< data.length; i++){
 	  		    	     	    
@@ -183,32 +157,49 @@
 		        td1.style.border = '1px solid black';
 		        
 		        var td = tr.insertCell();
-	           // td.appendChild(document.createTextNode(data[i]['testcase_id']));
+	            td.appendChild(document.createTextNode(data[i]['testsuite_id']));
 	            td.style.border = '1px solid black';
-	            a = document.createElement('a');
-	            
-	      	    a.href =  "/DBConnectionProject/html/tc_details.html?"+"app="+applicationName
-        		+"&status="+testCaseStatus+"&range="+range+"&offset="+offset;
-	      	    a.target='_blank';
-	      	    
-	      	    a.innerHTML= data[i]['testcase_id'];
-	      	    td.appendChild(a);
 	            
 	           	var td = tr.insertCell();
-	            td.appendChild(document.createTextNode(testCaseStatus));
+	            td.appendChild(document.createTextNode(data[i]['testcase_id']));
 	            td.style.border = '1px solid black';
 	            
 	            var td = tr.insertCell();
 	            td.appendChild(document.createTextNode(data[i]['TestCase_Name']));
 	            td.style.border = '1px solid black';
+	            
+	           	var td = tr.insertCell();
+	            td.appendChild(document.createTextNode(data[i]['execution_date']));
+	            td.style.border = '1px solid black';
+	            
+	            var td = tr.insertCell();
+	            td.appendChild(document.createTextNode(data[i]['timeexecution']));
+	            td.style.border = '1px solid black';
+	            
+	           	var td = tr.insertCell();
+	            td.appendChild(document.createTextNode(parseDescrition(data[i]['description'])));
+	            td.style.border = '1px solid black';
+		        
+  	
   			}
 	  		
-	  		div.appendChild(tbl);    	  
+	  		div.appendChild(tbl);
+	  		
+	  		
+    	  
       }
-          	 
+      
+      function parseDescrition(description){
+    	  
+    	  //console.log("inside function....  " +description);
+    	  
+    	  description = description.replace(/(?:\r\n|\r|\n)/g, '');
+    	  return description;
+      }
+    	 
     	 </script>
 	</head>
-	<body onload="draw(0)">
+	<body onload="draw()">
 	
 	<div id="heading">
     <img style="float:left" src="/logo.jpg" alt="Continuum Logo"><br>
