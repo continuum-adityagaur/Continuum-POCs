@@ -44,7 +44,11 @@
         }).responseText;
     	   
     	   
-    	 var data = JSON.parse(jsonData);
+    	 try{
+    		 var data = JSON.parse(jsonData);
+    	 }catch(exception){
+    		 alert("Request timed out!! Please refresh the page");
+    	 }
     	 	 
     	 var failLabel = "Fail"; var passLabel = "Pass";
     	 var blockLabel = "Blocked"; var naLabel =  "Not Applicable";
