@@ -48,9 +48,9 @@
     	  var applicationName = params.get('app');
     	  var range = params.get('range');
     	  
-    	  //ajax call for getting data from Database by DBconnection.php
+    	  //ajax call for getting data from Database by ExecutionDetails.php
     	  var jsonData = $.ajax({
-    		  url: "/DBConnectionProject/src/ExecutionDetails.php",
+    		  url: "/AutomationStatus/src/ExecutionDetails.php",
     		  type:"POST",
     		  data: {status:testCaseStatus, application:applicationName, range:range, offset:offset},
     		  dataType: "json",
@@ -87,7 +87,7 @@
       		if(data.length==0){
       			alert("no more records exists!!")      			
       		}
-      		else if(data.length!=0 && data.length<10){
+      		else if(data.length!=0 && data.length<25){
       			
       			console.log("Data length :: " + data.length);
           	  
@@ -107,7 +107,7 @@
 		      		buttonStyle(button);
 		      		button.style.width='100%';
 		      		button.style.border= 'none';
-		      		var button_text	=	document.createTextNode('Displaying records '+offset+' to '+ (offset+10));
+		      		var button_text	=	document.createTextNode('Displaying records '+offset+' to '+ (offset+25));
 		      		button.appendChild(button_text);
 		      		div.appendChild(button);
 		      		
@@ -120,7 +120,7 @@
 		      		var button_text1	=	document.createTextNode('Click here for more records!');
 		      		button1.appendChild(button_text1);
 		      		
-		      		var new_offset= offset+10;
+		      		var new_offset= offset+25;
 		      		button1.onclick = function() {draw(new_offset)};
 		      		drawTable(data, div,testCaseStatus,applicationName,range, offset);
 		      		div.appendChild(button1)
@@ -194,7 +194,7 @@
 	            td.style.border = '1px solid black';
 	            a = document.createElement('a');
 	            
-	      	    a.href =  "/DBConnectionProject/html/tc_details.html?"+"app="+applicationName
+	      	    a.href =  "/AutomationStatus/html/tc_details.html?"+"app="+applicationName
         		+"&status="+testCaseStatus+"&range="+range+"&offset="+offset;
 	      	    a.target='_blank';
 	      	    

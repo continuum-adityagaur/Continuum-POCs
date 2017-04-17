@@ -19,6 +19,7 @@
 		#selectFormatting {
   			display: inline-block;
 		}
+		
 	</style>
 	
 	
@@ -32,18 +33,18 @@
             
       
       //Load the chart data from DB by calling DBConnection.php
-      function getChartData(selectedApplication, selectionPeriod) {		   
-    	   
+      function getChartData(selectedApplication, selectionPeriod) {
+   	  
     	//ajax call for getting data from Database by DBconnection.php
     	var jsonData = $.ajax({
-        url: "/DBConnectionProject/src/DBConnection.php",
+        url: "/AutomationStatus/src/DBConnection.php",
         type:"POST",
         data: {id:selectedApplication, range:selectionPeriod},
         dataType: "json",
         async: false
+               
         }).responseText;
-    	   
-    	   
+    	  
     	 try{
     		 var data = JSON.parse(jsonData);
     	 }catch(exception){
@@ -143,7 +144,7 @@
         // performing the click operation on chart legends        
         function performAction(selectedItem){
         	
-        	var testCaseListPageURL = "/DBConnectionProject/html/tc_list.html?";
+        	var testCaseListPageURL = "/AutomationStatus/html/tc_list.html?";
         	
         	if (selectedItem) {
                 var selectedValue = data.getValue(selectedItem.row, 0);
@@ -200,13 +201,14 @@
 	  		<option value="5">T-5 Days</option>
 	  		<option value="6">T-6 Days</option> 
 		</select>
+		
 		&nbsp;&nbsp;<label>OR</label>&nbsp;
 		<input type="radio" id="radio" name="radio_dateRange" value="7" onclick="run()"> Last 7 Days
   		<input type="radio" id="radio" name="radio_dateRange" value="15" onclick="run()"> Last 15 Days
   		<input type="radio" id="radio" name="radio_dateRange" value="30" onclick="run()">Last 30 Days
 		
     </div>
- 	    
+    	    
     <table>
       <tr>
         <td><div id="piechart_div" style="border: 1px solid #ccc"></div></td>

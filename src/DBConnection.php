@@ -1,6 +1,7 @@
 <?php
+
 //reading DB Connection details from ini file
-$config = parse_ini_file('C:/xampp/htdocs/DBConnectionProject/config/dbCon.ini');
+$config = parse_ini_file('C:/xampp/htdocs/AutomationStatus/config/dbCon.ini');
 
 //address of the server where db is installed
 $servername = $config['serverName'];

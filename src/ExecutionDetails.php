@@ -1,6 +1,6 @@
 <?php
 //reading DB Connection details from ini file
-$config = parse_ini_file('C:/xampp/htdocs/DBConnectionProject/config/dbCon.ini');
+$config = parse_ini_file('C:/xampp/htdocs/AutomationStatus/config/dbCon.ini');
 
 //address of the server where db is installed
 $servername = $config['serverName'];
@@ -31,10 +31,10 @@ $offset	=intval($_POST["offset"]);
 
 //the SQL query to be executed
 if($applicationName == "All"){
-	$query = "select * from execution_status where testcase_status='$Status' and DATE(execution_date) > (NOW() - INTERVAL '$range' DAY) LIMIT 10 OFFSET $offset;";
+	$query = "select * from execution_status where testcase_status='$Status' and DATE(execution_date) > (NOW() - INTERVAL '$range' DAY) LIMIT 25 OFFSET $offset;";
 }else{
 	$query = "select * from execution_status where testcase_status='$Status' and prod_name='$applicationName'
-															and DATE(execution_date) > (NOW() - INTERVAL '$range' DAY) LIMIT 10 OFFSET $offset;";
+															and DATE(execution_date) > (NOW() - INTERVAL '$range' DAY) LIMIT 25 OFFSET $offset;";
 }
 //storing the result of the executed query
 $result = $conn->query($query);

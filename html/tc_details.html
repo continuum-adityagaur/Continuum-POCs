@@ -51,9 +51,9 @@
     	  
     	  console.log("Offset "+offset);
     	  
-    	  //ajax call for getting data from Database by DBconnection.php
+    	  //ajax call for getting data from Database by ExecutionDetails.php
     	  var jsonData = $.ajax({
-    		  url: "/DBConnectionProject/src/ExecutionDetails.php",
+    		  url: "/AutomationStatus/src/ExecutionDetails.php",
     		  type:"POST",
     		  data: {status:testCaseStatus, application:applicationName, range:range, offset:offset},
     		  dataType: "json",
