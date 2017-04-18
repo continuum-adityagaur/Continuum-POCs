@@ -36,7 +36,7 @@
 	  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	  <script type="text/javascript">
             
-       
+	  var index =0;
       function draw(offset) {
     	  
     	  console.log("Offset "+offset);
@@ -93,6 +93,7 @@
       			console.log("Data length :: " + data.length);
           	  
       			var button = document.createElement('button');
+      			button.id='button'+(index+1);
 	      		buttonStyle(button);
 	      		button.style.width='100%';
 	      		button.style.border= 'none';
@@ -105,6 +106,7 @@
     	  
       			}else{
 		      		var button = document.createElement('button');
+		      		button.id='button'+(index+1);
 		      		buttonStyle(button);
 		      		button.style.width='100%';
 		      		button.style.border= 'none';
@@ -128,7 +130,9 @@
 		          	body.appendChild(div);
       		}
       		
-      	
+      		console.log("After drawing table, value of index " + index);
+      		
+      		window.scrollTo(0, $("#button"+index).offset().top);
         	 
     	 
       
@@ -148,10 +152,11 @@
       //rendering the table 
       function drawTable(data, div,testCaseStatus,applicationName,range, offset,optionValue){
     	  
-    	  console.log("Inside drawTable() ::" + testCaseStatus + range+applicationName );
+    	  index++;
+    	  console.log("Index value " + index);
     	  
     	  tbl  = document.createElement('table');
-    	  tbl.id='tbl';
+    	  tbl.id='tbl'+index;
     	    
     	   	tbl.style.width  = 'auto';
     	    tbl.style.border = '2px solid black';
