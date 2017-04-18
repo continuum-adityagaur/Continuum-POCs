@@ -108,7 +108,7 @@
 		      		var button = document.createElement('button');
 		      		button.id='button'+(index+1);
 		      		buttonStyle(button);
-		      		button.style.width='100%';
+		      		button.style.width='78%';
 		      		button.style.border= 'none';
 		      		var button_text	=	document.createTextNode('Displaying records '+offset+' to '+ (offset+25) + ' of ' +optionValue);
 		      		button.appendChild(button_text);
@@ -117,23 +117,25 @@
 		      		var button1 = document.createElement('button');
 		      		button1.id='btn';
 		      		buttonStyle(button1);
-		      		button1.style.float = 'right';
+		      		button1.style.float = 'center';
 		      		button1.style.backgroundColor = '#4CAF50';
+		      		button.style.border= 'none';
 		      		button1.style.cursor='pointer';
-		      		var button_text1	=	document.createTextNode('Click here for more records!');
+		      		var button_text1	=	document.createTextNode('Click here for next 25 records!');
 		      		button1.appendChild(button_text1);
+		      		div.appendChild(button1)
 		      		
 		      		var new_offset= offset+25;
 		      		button1.onclick = function() {draw(new_offset)};
 		      		drawTable(data, div,testCaseStatus,applicationName,range, offset,optionValue);
-		      		div.appendChild(button1)
+		      		
 		          	body.appendChild(div);
       		}
       		
       		console.log("After drawing table, value of index " + index);
       		
       		window.scrollTo(0, $("#button"+index).offset().top);
-        	 
+      		
     	 
       
       }
