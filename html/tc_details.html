@@ -39,8 +39,6 @@
        
       function draw() {
     	  
-    	  
-    	  
     	  //getting GET params from the URL
     	  let params = (new URL(location)).searchParams;
     	   
@@ -48,6 +46,7 @@
     	  var applicationName = params.get('app');
     	  var range = params.get('range');
     	  var offset = params.get('offset');
+    	  var optionValue = params.get('optionValue');
     	  
     	  console.log("Offset "+offset);
     	  
@@ -83,7 +82,7 @@
 		    buttonStyle(button);
 		    button.style.width='100%';
 		    button.style.border= 'none';
-		    var button_text	=	document.createTextNode('Displaying records '+offset+' to '+ (parseInt(offset)+data.length));
+		    var button_text	=	document.createTextNode('Displaying records '+offset+' to '+ (parseInt(offset)+data.length)+ ' of ' + optionValue);
 		    button.appendChild(button_text);
 		    div.appendChild(button);
 		      		

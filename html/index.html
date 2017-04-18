@@ -31,6 +31,7 @@
       // Load the Visualization API and the corechart package.
       google.charts.load('current', {'packages':['corechart']});
             
+      var failValue = passValue = blockValue = naValue = 0;
       
       //Load the chart data from DB by calling DBConnection.php
       function getChartData(selectedApplication, selectionPeriod) {
@@ -53,7 +54,7 @@
     	 	 
     	 var failLabel = "Fail"; var passLabel = "Pass";
     	 var blockLabel = "Blocked"; var naLabel =  "Not Applicable";
-    	 var failValue = passValue = blockValue = naValue = 0;
+    	 
     	 
     	 
     	 for(var i=0; i<data.length; i++){
@@ -92,6 +93,8 @@
         //callback to function - render charts
         drawchart(data, selectedApplication,selectionPeriod);
         
+		
+        
       }
 		
       // function that draws the pie chart and barchart
@@ -118,7 +121,7 @@
           google.visualization.events.addListener(pie_chart, 'select', pie_selectHandler);
           pie_chart.draw(data, pie_options);
           
-       // Set pie chart options
+       // Set Bar chart options
           var barchart_options = { 'title':selectedApplication+ ' - Automation Status ' +  statusDate,
           		width:600,
                   height:400,
@@ -147,12 +150,33 @@
         	var testCaseListPageURL = "/AutomationStatus/html/tc_list.html?";
         	
         	if (selectedItem) {
-                var selectedValue = data.getValue(selectedItem.row, 0);
+                var selectedOption = data.getValue(selectedItem.row,0);
+                var selectedOptionValue = getOptionValue(selectedOption); 
+                console.log("Option value is:  " +selectedOptionValue);
                 window.open(testCaseListPageURL+"app="+selectedApplication
-                		+"&status="+selectedValue+"&range="+selectionPeriod);
-              }
-        	
+                		+"&status="+selectedOption+"&range="+selectionPeriod+"&optionValue="+selectedOptionValue);
+              }        	
         }
+        
+		function getOptionValue(selectedOption){
+        	
+        	var value=0;
+        	
+        	switch(selectedOption){
+        	
+        	case 'Fail'			:	value=failValue;
+									break;			
+        	case 'Pass'			:	value=passValue;
+        							break;			
+			case 'Blocked'		:	value=blockValue;			
+									break;			
+			case 'Not Applicable'	:	value=naValue;
+									break       	
+        	}        	
+        	return parseInt(value);
+        }
+        
+        
      }
       
     </script>

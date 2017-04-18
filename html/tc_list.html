@@ -47,6 +47,7 @@
     	  var testCaseStatus = params.get('status');
     	  var applicationName = params.get('app');
     	  var range = params.get('range');
+    	  var optionValue = params.get('optionValue');
     	  
     	  //ajax call for getting data from Database by ExecutionDetails.php
     	  var jsonData = $.ajax({
@@ -95,11 +96,11 @@
 	      		buttonStyle(button);
 	      		button.style.width='100%';
 	      		button.style.border= 'none';
-	    		var label_text	=	document.createTextNode('Displaying records '+offset+' to '+ (offset+data.length));
+	    		var label_text	=	document.createTextNode('Displaying records '+offset+' to '+ (offset+data.length) + ' of ' + optionValue );
 	    		button.appendChild(label_text);
 	    		div.appendChild(button);
 	    		
-	    		drawTable(data, div,testCaseStatus,applicationName,range, offset);
+	    		drawTable(data, div,testCaseStatus,applicationName,range, offset,optionValue);
 	          	body.appendChild(div);
     	  
       			}else{
@@ -107,7 +108,7 @@
 		      		buttonStyle(button);
 		      		button.style.width='100%';
 		      		button.style.border= 'none';
-		      		var button_text	=	document.createTextNode('Displaying records '+offset+' to '+ (offset+25));
+		      		var button_text	=	document.createTextNode('Displaying records '+offset+' to '+ (offset+25) + ' of ' +optionValue);
 		      		button.appendChild(button_text);
 		      		div.appendChild(button);
 		      		
@@ -122,7 +123,7 @@
 		      		
 		      		var new_offset= offset+25;
 		      		button1.onclick = function() {draw(new_offset)};
-		      		drawTable(data, div,testCaseStatus,applicationName,range, offset);
+		      		drawTable(data, div,testCaseStatus,applicationName,range, offset,optionValue);
 		      		div.appendChild(button1)
 		          	body.appendChild(div);
       		}
@@ -145,7 +146,7 @@
       }
       
       //rendering the table 
-      function drawTable(data, div,testCaseStatus,applicationName,range, offset){
+      function drawTable(data, div,testCaseStatus,applicationName,range, offset,optionValue){
     	  
     	  console.log("Inside drawTable() ::" + testCaseStatus + range+applicationName );
     	  
@@ -195,7 +196,7 @@
 	            a = document.createElement('a');
 	            
 	      	    a.href =  "/AutomationStatus/html/tc_details.html?"+"app="+applicationName
-        		+"&status="+testCaseStatus+"&range="+range+"&offset="+offset;
+        		+"&status="+testCaseStatus+"&range="+range+"&offset="+offset +"&optionValue="+optionValue;
 	      	    a.target='_blank';
 	      	    
 	      	    a.innerHTML= data[i]['testcase_id'];
