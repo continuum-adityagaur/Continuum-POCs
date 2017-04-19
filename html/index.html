@@ -35,6 +35,8 @@
       
       //Load the chart data from DB by calling DBConnection.php
       function getChartData(selectedApplication, selectionPeriod) {
+    	  
+    	 failValue = passValue = blockValue = naValue = 0;
    	  
     	//ajax call for getting data from Database by DBconnection.php
     	var jsonData = $.ajax({

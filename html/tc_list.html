@@ -64,7 +64,7 @@
      		 alert("Request timed out!! Please refresh the page");
      	 }
     	 	 
-    	 	// $("#main").html('');
+    	 	//$("#main").html('');
       		var body = document.body;
       		
       		var div = document.createElement('div');
@@ -134,17 +134,15 @@
       		
       		console.log("After drawing table, value of index " + index);
       		
+      		if((index-1)!=0)
       		window.scrollTo(0, $("#button"+index).offset().top);
-      		
-    	 
-      
       }
       
       //styling the header above the table
       function buttonStyle(button){
     	  	button.style.backgroundColor = '#f44336';
     	  	button.style.color = 'white';
-    		button.style.padding= '10px 32px';
+    		button.style.padding= '10px 35px';
     		button.style.textAlign = 'center';
     		button.style.textDecoration= 'none';
     		button.style.display= 'inline-block';
@@ -168,9 +166,9 @@
     	  	var tr = header.insertRow(0);
  	   		tr.style.backgroundColor = '#008CBA';
  	   		   	   	 	
- 	   		
  	   		var td = tr.insertCell();
     		td.appendChild(document.createTextNode('Application'));
+    		td.style.width="auto";
     		td.style.border = '1px solid black';
  	    
  	    	td = tr.insertCell();
@@ -180,6 +178,7 @@
         	
 	         var td = tr.insertCell();
 	         td.appendChild(document.createTextNode('Execution Status'));
+	         td.style.width="auto";
 	         td.style.border = '1px solid black';
 	         
 	         var td = tr.insertCell();
